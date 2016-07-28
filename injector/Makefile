@@ -15,7 +15,7 @@ endif
 
 # COMMON CONFIGURATION #
 
-NAME := InputProc
+NAME := InputRedirectionNTR
 
 BUILD_DIR := build
 OUTPUT_DIR := output
@@ -33,10 +33,10 @@ RUN_FLAGS :=
 # 3DS CONFIGURATION #
 
 TITLE := $(NAME)
-DESCRIPTION := Relays input for the wifi thing. Go away.
+DESCRIPTION := Patches HID process.
 AUTHOR := Stary
-PRODUCT_CODE := CTR-P-CINP
-UNIQUE_ID := 0x1234
+PRODUCT_CODE := CTR-P-INTR
+UNIQUE_ID := 0xF0109
 
 SYSTEM_MODE := 64MB
 SYSTEM_MODE_EXT := Legacy
