@@ -15,7 +15,7 @@ endif
 
 # COMMON CONFIGURATION #
 
-NAME := InputRedirectionNTR
+NAME := ButtonSwapNTR
 
 BUILD_DIR := build
 OUTPUT_DIR := output
@@ -34,9 +34,9 @@ RUN_FLAGS :=
 
 TITLE := $(NAME)
 DESCRIPTION := Patches HID process.
-AUTHOR := Stary
+AUTHOR := Stary & mikahjc
 PRODUCT_CODE := CTR-P-INTR
-UNIQUE_ID := 0xF0109
+UNIQUE_ID := 0xF0110
 
 SYSTEM_MODE := 64MB
 SYSTEM_MODE_EXT := Legacy

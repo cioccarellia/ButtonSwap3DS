@@ -1,14 +1,17 @@
-# limitations
-i don't hook the IR service, so no zl/zr or c-stick
+# Limitations
+I don't hook the IR service yet, so no zl/zr or c-stick.
+However, it is why I started this, so I'll be looking into it.
 
-## credits and stuff
+## Credits
 Memory patching code taken from BootNTR
 
 Steveice10's buildtools used to build input_proc
 
-Shinyquagsire for inspiring me to start this with his writeup, then helping me along the way
+Shinyquagsire for his writeup on redirecting input over WiFi.
 
-## how do i use this
-Install the InputRedirectionNTR cia on your 3ds, then run NTR CFW and enable debug mode.
+Stary & Kazo for InputRedirector, upon which almost all of this is based.
 
-use this input program to actually get input to the ds: https://github.com/Kazo/InputRedirectionClient/tree/NTR
+## How to Use
+Install the ButtonSwapNTR cia on your 3ds.
+
+Not really configurable right now, but can be changed if you know ASM.
