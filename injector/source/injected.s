@@ -69,20 +69,47 @@ STR     R4, [R3]
 MOV     PC, R14
 
 .swap:
-LDR     R2, [R0]         // Load HID State
+LDR     R2, [R0]       // Load HID State
+MOV     R6, R2         // R2 = TempHID  R6 = HID State
 
-MOV     R3, #0x20
-LSL     R3, R3, #4
-ADD     R3, R3, #2       // R3 Button mask
+// A ==> B
+MOV     R3, #0x2       // R3 Button mask
+MOV     R4, #0x3       // R4 EOR mask
+AND     R5, R6, R3     // Extract desired values
 
-MOV     R4, #0x30
+// 1:1 Swap (A<==>B)
+//CMP     R0, R3       // See if either are pressed: 1:1 swap
+//EORNE   R2, R2, R4   // If so, EOR temp HID Register: 1:1 swap
+
+// X:1 Replace (L+B==>R)
+CMP     R5, #0         // See if all are pressed: X:1 Replace
+EOREQ   R2, R2, R4     // If so, EOR temp HID Register: X:1 Replace
+
+// Y ==> A
+MOV     R3, #0x1
+
+MOV     R4, #0x80
 LSL     R4, R4, #4
-ADD     R4, R4, #2       // R3 XOR mask
+ADD     R4, R4, #1
 
-AND     R0, R2, R3       // Extract desired values
-CMP     R0, #0           // See if either are pressed
-EOREQ   R2, R2, R4       // If so, xor HID Register
-STR     R2, [R1]         // Store R4 at *R3
+AND     R5, R6, R3
+
+CMP     R5, #0
+EOREQ   R2, R2, R4
+
+// B ==> Y
+MOV     R3, #0x800
+
+MOV     R4, #0x80
+LSL     R4, R4, #4
+ADD     R4, R4, #2
+
+AND     R5, R6, R3
+
+CMP     R5, #0
+EOREQ   R2, R2, R4
+
+STR     R2, [R1]         // Move temp HID to RedHID
 MOV     PC, R14          // Return
 
 .LTORG # assembles literal pool
