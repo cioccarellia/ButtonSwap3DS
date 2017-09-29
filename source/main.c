@@ -19,13 +19,21 @@ scenic_process *hid;
 
 void read_input();
 extern u32 read_input_sz;
+u32* triggers;
+u32* maps;
 
 int main()
 {
 	gfxInitDefault();
 	consoleInit(GFX_BOTTOM, NULL);
 
+  triggers = malloc(3*sizeof(u32));
+  triggers = (u32[3]){1, 2, 0};
+  maps = malloc(3*sizeof(u32));
+  maps = (u32[3]){2, 1, 0};
+
 	printf("injecting into hid..\n");
+  printf("trigger values %x, %x. Addr: %x\n", triggers[0], triggers[1], &triggers);
 
 	hid = proc_open(0x10, 0);
 

@@ -1,9 +1,10 @@
+.balign 4
 .global read_input
 .global read_input_sz
 .set lr, r14
 
 read_input:
-stmfd   SP!, {R4-R8,LR}
+push    {R4-R8,LR}
 mov     R5, R1
 mrc     p15, 0, R4,c13,c0, 3
 mov     R1, #0x10000
@@ -65,7 +66,7 @@ ldr     r3, =0x10df0c
 bl      .copy
 
 .ret:
-ldmfd   SP!, {R4-R8,PC}
+pop     {R4-R8,PC}
 
 .copy:
 ldr     r4, [r0]
@@ -102,7 +103,21 @@ mov     r3, #0                          @
 @ bl .button                         @
 @====================================@
 
-@ Add mappings here
+  ldr r6, =triggers
+  ldr r7, =maps
+  ldr r4, [r6], #4
+  bkpt #0
+  ldr r5, [r7], #4
+
+bloop:
+  cmp r4, #0  @ Have we completed all mappings?
+  beq bend    @ If so, exit loop
+  bl .button
+  ldr r4, [r6], #4
+  ldr r5, [r7], #4
+  bkpt #0
+  b bloop
+bend:
 
 @=============================@
 @         TOUCHSCREEN         @
@@ -191,6 +206,10 @@ bx      r14          @
 
 read_input_sz:
 .4byte .-read_input
+triggers_sz:
+.word triggers
+maps_sz:
+.word maps
 
 @====================@
 @ DEVELOPER USE ONLY @
