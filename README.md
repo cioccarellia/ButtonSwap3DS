@@ -14,6 +14,12 @@ Install the ButtonSwapNTR cia on your 3ds.
 
 Not really configurable right now, but can be changed if you know ASM.
 
+## Compiling/Configuring
+
+The easiest way to build this is to use the provided docker-compose file in [the docker directory](docker/).
+Clone this repository, make sure you have Docker installed (Install instructions for [Windows](https://docs.docker.com/docker-for-windows/install/) and [MacOS](https://docs.docker.com/docker-for-mac/install/)). Then, open a terminal/command prompt in the directory you cloned this repository into, `cd` into docker/, then run `docker-compose up`. Docker will build the image which contains all of the dependencies, then run make in the repository.
+
+### Old/non-Docker build environment setup
 You will need a working setup of the devkitARM toolchain for 3DS, follow [this guide](https://www.3dbrew.org/wiki/Setting_up_Development_Environment) for help.
 
 You will also need the [ScenicRoute](https://github.com/Stary2001/ScenicRoute) library by Stary2001.  Clone it, then run make install in the ScenicRoute directory.
