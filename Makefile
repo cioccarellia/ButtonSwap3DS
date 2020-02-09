@@ -27,7 +27,7 @@ include $(DEVKITARM)/3ds_rules
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
-BUILD		:=	build
+BUILD		:=	$(notdir $(USERCONF))
 SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
@@ -133,7 +133,8 @@ all: $(BUILD)
 $(BUILD):
 	@echo $(SFILES)
 	@[ -d $@ ] || mkdir -p $@
-	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@make --no-print-directory -C $(USERCONF) -f $(BUTTONSWAP_SRC_LOCATION)/Makefile
+	@rm -rf $(BUILD)
 
 #---------------------------------------------------------------------------------
 injector:
