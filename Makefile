@@ -33,7 +33,7 @@ DATA		:=	data
 INCLUDES	:=	include
 APP_TITLE	:=	ButtonSwap
 APP_TITLE_MODE3	:= ButtonSwap-Mode3
-APP_DESCRIPTION := "Patches HID/IR to remap buttons."
+APP_DESCRIPTION := "Patches HID to remap buttons."
 APP_AUTHOR	:=	"Stary & MikahJC"
 ICON		:=	meta/icon.png
 DO_3DSX		:=	no
@@ -70,7 +70,12 @@ LIBDIRS	:= $(CTRULIB)
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
 
+ifdef USERCONF
+export OUTPUT := $(USERCONF)/$(TARGET)
+else
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
+endif
+
 export TOPDIR	:=	$(CURDIR)
 
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
@@ -102,7 +107,8 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-			-I$(CURDIR)/$(BUILD)
+			-I$(CURDIR)/$(BUILD) \
+			-I$(USERCONF)
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
@@ -129,6 +135,9 @@ $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
+#---------------------------------------------------------------------------------
+injector:
+	@echo $(SFILES) $(OFILES)
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
@@ -173,12 +182,12 @@ $(OUTPUT)_stripped.elf: $(OUTPUT).elf
 	@cp $(OUTPUT).elf $(OUTPUT)_stripped.elf
 	@$(PREFIX)strip $(OUTPUT)_stripped.elf
 
-$(OUTPUT).cia: $(OUTPUT)_stripped.elf banner.bnr icon.icn
-	@makerom -f cia -o $(OUTPUT).cia -rsf $(TOPDIR)/meta/cia.rsf -target t -exefslogo -elf $(OUTPUT)_stripped.elf -icon icon.icn -banner banner.bnr -ver 1040
+$(OUTPUT).cia: $(OUTPUT).elf banner.bnr icon.icn
+	@makerom -f cia -o $(OUTPUT).cia -rsf $(USERCONF)/cia.rsf -target t -exefslogo -elf $(OUTPUT).elf -icon icon.icn -banner banner.bnr -ver 1040
 	@echo "built ... $(notdir $@)"
 
-$(OUTPUT)_mode3.cia: $(OUTPUT)_stripped.elf banner_mode3.bnr icon_mode3.icn
-	@makerom -f cia -o $(OUTPUT)_mode3.cia -rsf $(TOPDIR)/meta/cia_mode3.rsf -target t -exefslogo -elf $(OUTPUT)_stripped.elf -icon icon_mode3.icn -banner banner_mode3.bnr -ver 1040
+$(OUTPUT)_mode3.cia: $(OUTPUT).elf banner_mode3.bnr icon_mode3.icn
+	@makerom -f cia -o $(OUTPUT)_mode3.cia -rsf $(TOPDIR)/meta/cia_mode3.rsf -target t -exefslogo -elf $(OUTPUT).elf -icon icon_mode3.icn -banner banner_mode3.bnr -ver 1040
 	@echo "built ... $(notdir $@)"
 
 #---------------------------------------------------------------------------------------

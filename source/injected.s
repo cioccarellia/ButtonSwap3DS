@@ -4,33 +4,41 @@
 
 read_input:
 stmfd   SP!, {R4-R8,LR}
+
+push    {r3}
 mov     R5, R1
 mrc     p15, 0, R4,c13,c0, 3
 mov     R1, #0x10000
 str     R1, [R4,#0x80]!
 ldr     R0, [R0]
 svc     0x32
-ands    R1, R0, #0x80000000
-bmi     .ret
-push    {r3}
-ldr     r3, =0x10df08
-ldrd    R0, [R4,#8]
-strd    R0, [R3, #8]
-ldrd	  r0, [R3]
-strd	  r0,	[R5]
-ldr     R0, [R4,#4]
+#ands    R1, R0, #0x80000000
+mov r12, r0
 pop     {r3}
 
+cmp r12, #0
+bmi     .ret
+
+ldr     r3, =0x10df08
+ldrd    R0, [R4,#8]	@ load the touch/cp regs into r0/1
+strd    R0, [R3, #8]	@ write to r3+8
+ldrd	  r0, [R3]	@ read from r3+4
+strd	  r0,	[R5]
+ldr     R0, [R4,#4]
+
+@hidData[0]
 @buttons init
 ldr     r0, =0x10df20
 ldr     r1, =0xFFF
 str     r1, [r0]
 
+@hidData[1]
 @touch init
 ldr     r0, =0x10df24
 ldr     r1, =0x2000000
 str     r1, [r0]
 
+@hidData[2]
 @cpad init
 ldr     r0, =0x10df28
 ldr     r1, =0x800800
@@ -103,6 +111,7 @@ mov     r3, #0                          @
 @====================================@
 
 @ Add mappings here
+#include "button.s"
 
 @=============================@
 @         TOUCHSCREEN         @
@@ -116,6 +125,7 @@ ldr     r5, =0x2000000        @
 @=============================@
 
 @ Add mappings here
+#include "ts.s"
 
 @=================@
 .tp_end:          @
@@ -141,6 +151,7 @@ ldr     r5, =0x800800    @
 @========================@
 
 @ Add mappings here
+#include "cpad.s"
 
 @=====================@
 ldr     r1, =0x10df28 @
